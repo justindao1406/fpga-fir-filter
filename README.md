@@ -15,11 +15,11 @@ A 15-tap Q1.15 FIR low-pass filter implemented using SystemVerilog, verified wit
 
 ## Overview
 
-This project describes a finite impulse response low-pass filter in SystemVerilog. The FIR system uses 15 coefficients which are generated from its sample rate and cutoff frequency. The design uses Vivado where it is synthesized and implemented. Then, the converted bitstream is loaded onto an FPGA (PYNQ-Z2).
+This project describes a finite impulse response low-pass filter in SystemVerilog. The FIR system uses 15 coefficients which are generated from its sample rate and cutoff frequency. The design is ran in Vivado where it is synthesized and implemented. Then, the converted bitstream is loaded onto an FPGA (PYNQ-Z2).
 
 A 16-bit signed sample is fed into a filter one clock cycle at a time and the system stores all the recent samples into an internal array `sample_delay`. Each of the 15 samples will be multiplied by its corresponding coefficient and all products in the end are summed up to produce a filtered output.
 
-The design implements Q1.15 fixed point formatting for its samples and coefficients. This format converts fractional numbers to 16-bit signed integers for simpler hardware calculations. Using Python, a reference model was made to generate the appropriate coefficients and predicted outputs to verify against the SystemVerilog implementation.
+The design implements Q1.15 fixed point formatting for its samples and coefficients. This format converts fractional numbers to 16-bit signed integers for simpler hardware calculations. Using Python, a reference model was made to generate the appropriate coefficients and predicted outputs to verify the SystemVerilog implementation.
 
 ## Architecture
 
@@ -54,10 +54,10 @@ $$
 y[n] = \sum_{k=0}^{14} h[k]x[n-k]
 $$
 
-`x[n-k]` = delayed sample input and
+`x[n-k]` = delayed sample input  
 `h[k]` = filter coefficient.
 
-Calculating the product of a coefficient and a sample (both format Q1.15) produces a result with 30 fractional bits. The accumulated result is arithmetically shifted to the right by 15 bits which converts it back to Q1.15. The result is saturated to a signed 16-bit range to prevent undesirable overflow from wrapping around. `output_valid` indicates when `sample_out` contains a completed output.
+Calculating the product of a coefficient and a sample (both Q1.15 format) produces a result with 30 fractional bits. The accumulated result is arithmetically shifted to the right by 15 bits which converts it back to Q1.15. The result is saturated to a signed 16-bit range to prevent undesirable overflow from wrapping around. `output_valid` indicates when `sample_out` contains a completed output.
 
 ### FPGA Top Level System
 
@@ -77,7 +77,7 @@ The reset button is configured with a reset_pipe which allows for an asynchronou
 
 ### Two-Tone Test
 
-`fir_filter_q15_wave_tb`: A signal test similar to that of the Python reference model was performed using 480 samples from a combined signal of 1 kHz and 10 kHz sine waves. The reference model generated the input samples and the predicted Q1.15 outputs which were loaded as .mem files into the Vivado testbench. The testbench reported zero mismatches.
+`fir_filter_q15_wave_tb`: A signal test similar to that of the Python reference model was performed using 480 samples from a combined signal of 1 kHz and 10 kHz sine waves. The reference model generated the input samples and the predicted Q1.15 outputs and both groups were loaded as seperate .mem files into the Vivado testbench. The testbench reported zero mismatches.
 
 ![Vivado two-tone test with zero mismatches](docs/images/vivado_wave_test.png)
 
