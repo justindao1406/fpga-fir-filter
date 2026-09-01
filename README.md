@@ -11,7 +11,12 @@ A 15-tap Q1.15 FIR low-pass filter implemented using SystemVerilog, verified wit
 - Passed timing with positive setup and hold slack
 - Uses 15 DSP blocks, 58 LUTs and 45 flip-flops
 
-![PYNQ-Z2 FIR hardware demonstration](docs/images/fpga_result.png)
+If you also want to control the size:
+
+<p align="center">
+  <img src="docs/images/fpga_result.png" alt="PYNQ-Z2 FIR hardware demonstration" width="700"><br>
+  <em>Hardware result: <code>led_done</code> indicates the test completed, <code>led_pass</code> indicates all samples matched, and <code>led_fail</code> indicates a mismatch.</em>
+</p>
 
 ## Overview
 
